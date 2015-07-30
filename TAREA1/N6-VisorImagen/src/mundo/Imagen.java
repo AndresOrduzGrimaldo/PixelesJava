@@ -172,6 +172,28 @@ public class Imagen
         //donde r, g, b son enteros que representan los colores de un pixel
         //bitmap[ i ][ j ] = new Color( r, g, b );
         
+        int r=0,g=0,b=0;
+        int ra=0,ga=0,ba=0;
+        
+        for (int i=0;i<255;i++){
+            for(int j =0;j<255;j++){
+//                System.out.println(i);
+//                System.out.println(j);
+                if(bitmap[i][j]==null){
+                  bitmap[i][j] = new Color(0,0,0);  
+                }
+                 r =bitmap[i][j].getRed();
+                 g =bitmap[i][j].getGreen();
+                 b =bitmap[i][j].getBlue();
+                 ra = 255- r;
+                 ga = 255- g;
+                 ba = 255- b;
+                
+                                
+                bitmap[i][j] = new Color (ra,ga,ba);
+                
+            }
+        }
     }
 
     /**
@@ -179,7 +201,24 @@ public class Imagen
      */
     public void reflejarImagen( )
     {
+        int r=0,g=0,b=0;
         
+        for (int i=0;i<192;i++){
+            for(int j =0;j<130;j++){
+//                System.out.println(i);
+//                System.out.println(j);
+                if(bitmap[i][j]==null){
+                  bitmap[i][j] = new Color(0,0,0);  
+                }
+                
+                 r =bitmap[i][j].getRed();
+                 g =bitmap[i][j].getGreen();
+                 b =bitmap[i][j].getBlue();
+                                
+                bitmap[i][j] = new Color(bitmap[i][254-j].getRed(),bitmap[i][254-j].getGreen(),bitmap[i][254-j].getBlue());
+                bitmap[i][254-j] = new Color(r,g,b);
+            }
+        }
         
     }
 
@@ -196,6 +235,31 @@ public class Imagen
         //bitmap[ i ][ j ] = Color.BLACK;
         //bitmap[ i ][ j ] = Color.WHITE;
         
+        int r=0,g=0,b=0;
+        int rr=0,qq=0,bb=0;
+        
+        for (int i=0;i<255;i++){
+            for(int j =0;j<255;j++){
+//                System.out.println(i);
+//                System.out.println(j);
+                if(bitmap[i][j]==null){
+                  bitmap[i][j] = new Color(0,0,0);  
+                }
+                 r =bitmap[i][j].getRed();
+                 g =bitmap[i][j].getGreen();
+                 b =bitmap[i][j].getBlue();
+                 
+                 rr = (r+g+b)/3;
+                 if(rr<umbral){
+                     bitmap[i][j] = new Color(0,0,0);
+                 }else{
+                     bitmap[i][j] = new Color(255,255,255);
+                 }
+            }
+                 
+            
+        }
+        
     }
 
     /**
@@ -204,12 +268,34 @@ public class Imagen
      */
     public void pixelarImagen( )
     {
+        
         //Los p�xeles son divisores de las dimensiones de la imagen
         int anchoPixel = menorDivisorMayorAUno( ancho );
         int altoPixel = menorDivisorMayorAUno( alto );
-
+        int r=0,g=0,b=0,d=0;
         //Recorre la matriz por regiones para modificarla
-        
+        for (int i =0;i<255;i+=anchoPixel){
+            for (int k =0; k<255;k+=altoPixel){
+                d=0;
+                // MEJORAR SACAR EL COLOR PROMEDIO
+                for (int l =0; l<anchoPixel;l++){
+                    for(int m=0;m<altoPixel;m++){
+                        
+                        r =bitmap[l][m].getRed();
+                        g =bitmap[l][m].getGreen();
+                        b =bitmap[l][m].getBlue();
+                        
+                        d += (r+g+b)/3;
+                    }
+                }
+                for (int x =0; x<anchoPixel;x++){
+                    for(int y=0;y<altoPixel;y++){
+                        
+                        bitmap[x][y]= new Color(d,d,d);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -217,8 +303,24 @@ public class Imagen
      */
     public void convertirAGrises( )
     {
-        //Recorre la matriz de la imagen. para pasarla a gris.
+        int r=0,g=0,b=0;
+        int rr=0,qq=0,bb=0;
         
+        for (int i=0;i<255;i++){
+            for(int j =0;j<255;j++){
+//                System.out.println(i);
+//                System.out.println(j);
+                if(bitmap[i][j]==null){
+                  bitmap[i][j] = new Color(0,0,0);  
+                }
+                 r =bitmap[i][j].getRed();
+                 g =bitmap[i][j].getGreen();
+                 b =bitmap[i][j].getBlue();
+                 
+                 rr = (r+g+b)/3;
+                 bitmap[i][j] = new Color(rr,rr,rr);
+            }
+        }
     }
 
     /**
