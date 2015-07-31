@@ -273,47 +273,25 @@ public class Imagen
     
         
         //Los p�xeles son divisores de las dimensiones de la imagen
-//        int anchoPixel = menorDivisorMayorAUno( ancho );
-//        int altoPixel = menorDivisorMayorAUno( alto );
-//        int r=0,g=0,b=0,d=0;
-//        //Recorre la matriz por regiones para modificarla
-//        for (int i =0;i<255;i+=anchoPixel){
-//            for (int k =0; k<255;k+=altoPixel){
-//                d=0;
-//                // MEJORAR SACAR EL COLOR PROMEDIO
-//                for (int l =0; l<anchoPixel;l++){
-//                    for(int m=0;m<altoPixel;m++){
-//                        
-//                        r =bitmap[l][m].getRed();
-//                        g =bitmap[l][m].getGreen();
-//                        b =bitmap[l][m].getBlue();
-//                        
-//                        d += (r+g+b)/3;
-//                    }
-//                }
-//                for (int x =0; x<anchoPixel;x++){
-//                    for(int y=0;y<altoPixel;y++){
-//                        
-//                        bitmap[x][y]= new Color(d,d,d);
-//                    }
-//                }
-//            }
-//        }
+        int anchoPixel = menorDivisorMayorAUno( ancho );
+        int altoPixel = menorDivisorMayorAUno( alto );
         
-                for (int i =0;i<254;i++){
-                    for (int j =0; j<254;j++){
-
-                        if(bitmap[i][j]==null){
-                            bitmap[i][j]= new Color(0,0,0);
-                        }
-
-                        if(bitmap[i][j].getRGB()>this.colorPromedio().getRGB()){
-                            bitmap[i][j] = new Color(0,0,0);
-                        }else{
-                            bitmap[i][j] = new Color (254,254,254);
-                        }
+        Color aux;
+        //Recorre la matriz por regiones para modificarla
+        for (int i =0;i<200;i+=anchoPixel){
+            for (int k =0; k<200;k+=altoPixel){
+                
+                // MEJORAR SACAR EL COLOR PROMEDIO
+                aux = this.colorPromedio(i, k, i+anchoPixel, k+altoPixel);
+                for (int x =i; x<anchoPixel+i;x++){
+                    for(int y=k;y<altoPixel+k;y++){
+                        
+                        bitmap[x][y]=aux;
                     }
                 }
+            }
+        }
+        
                 
     }
 
@@ -534,6 +512,9 @@ public class Imagen
         for( int i = 0; i <= 192; i++ ){
             for( int j =1; j <= 130; j++ )
             {
+                if(bitmap[i][j]==null){
+                    bitmap[i][j]= new Color(0,0,0);
+                }
                 valorRojo = bitmap[ i ][ j ].getRed( );
                 valorVerde = bitmap[ i ][ j ].getGreen( );
                 valorAzul = bitmap[ i ][ j ].getBlue( );
@@ -546,6 +527,7 @@ public class Imagen
                     Enumeration e = contenedor.elements();
                     while(e.hasMoreElements()){
                         valor = (Color)e.nextElement();
+                        
                         if(valor.getRed()==valorRojo&& valor.getBlue()==valorAzul&&valor.getGreen()==valorVerde){
                             contenedor.put(clave+1,valor);
                             contenedor.remove(clave, valor);
