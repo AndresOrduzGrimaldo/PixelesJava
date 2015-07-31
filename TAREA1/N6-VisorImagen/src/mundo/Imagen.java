@@ -17,6 +17,9 @@ package mundo;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.imageio.*;
 
@@ -266,36 +269,52 @@ public class Imagen
      * Pixelamiento: Consiste en dividir la imagen en peque�as regiones de p�xeles y para cada una de esas regiones cambiar el color de los p�xeles al color promedio de dicha
      * regi�n. En este ejemplo, la regi�n se dimensiona con los divisores m�s peque�os del ancho y el alto de la imagen
      */
-    public void pixelarImagen( )
-    {
+    public void pixelarImagen( ){
+    
         
         //Los p�xeles son divisores de las dimensiones de la imagen
-        int anchoPixel = menorDivisorMayorAUno( ancho );
-        int altoPixel = menorDivisorMayorAUno( alto );
-        int r=0,g=0,b=0,d=0;
-        //Recorre la matriz por regiones para modificarla
-        for (int i =0;i<255;i+=anchoPixel){
-            for (int k =0; k<255;k+=altoPixel){
-                d=0;
-                // MEJORAR SACAR EL COLOR PROMEDIO
-                for (int l =0; l<anchoPixel;l++){
-                    for(int m=0;m<altoPixel;m++){
-                        
-                        r =bitmap[l][m].getRed();
-                        g =bitmap[l][m].getGreen();
-                        b =bitmap[l][m].getBlue();
-                        
-                        d += (r+g+b)/3;
+//        int anchoPixel = menorDivisorMayorAUno( ancho );
+//        int altoPixel = menorDivisorMayorAUno( alto );
+//        int r=0,g=0,b=0,d=0;
+//        //Recorre la matriz por regiones para modificarla
+//        for (int i =0;i<255;i+=anchoPixel){
+//            for (int k =0; k<255;k+=altoPixel){
+//                d=0;
+//                // MEJORAR SACAR EL COLOR PROMEDIO
+//                for (int l =0; l<anchoPixel;l++){
+//                    for(int m=0;m<altoPixel;m++){
+//                        
+//                        r =bitmap[l][m].getRed();
+//                        g =bitmap[l][m].getGreen();
+//                        b =bitmap[l][m].getBlue();
+//                        
+//                        d += (r+g+b)/3;
+//                    }
+//                }
+//                for (int x =0; x<anchoPixel;x++){
+//                    for(int y=0;y<altoPixel;y++){
+//                        
+//                        bitmap[x][y]= new Color(d,d,d);
+//                    }
+//                }
+//            }
+//        }
+        
+                for (int i =0;i<254;i++){
+                    for (int j =0; j<254;j++){
+
+                        if(bitmap[i][j]==null){
+                            bitmap[i][j]= new Color(0,0,0);
+                        }
+
+                        if(bitmap[i][j].getRGB()>this.colorPromedio().getRGB()){
+                            bitmap[i][j] = new Color(0,0,0);
+                        }else{
+                            bitmap[i][j] = new Color (254,254,254);
+                        }
                     }
                 }
-                for (int x =0; x<anchoPixel;x++){
-                    for(int y=0;y<altoPixel;y++){
-                        
-                        bitmap[x][y]= new Color(d,d,d);
-                    }
-                }
-            }
-        }
+                
     }
 
     /**
@@ -505,7 +524,45 @@ public class Imagen
      */
     public String metodo1( )
     {
-        return "Respuesta1 ";
+        
+        int valorRojo = 0, valorVerde = 0, valorAzul = 0;
+        
+        Hashtable<Integer,Color> contenedor=new Hashtable<Integer,Color>();
+        
+        contenedor.put(1,bitmap[0][0]);
+        
+        for( int i = 0; i <= 192; i++ ){
+            for( int j =1; j <= 130; j++ )
+            {
+                valorRojo = bitmap[ i ][ j ].getRed( );
+                valorVerde = bitmap[ i ][ j ].getGreen( );
+                valorAzul = bitmap[ i ][ j ].getBlue( );
+        
+                Enumeration k = contenedor.keys();
+                int clave;
+                Color valor;
+                while(k.hasMoreElements()){
+                    clave=(int)k.nextElement();
+                    Enumeration e = contenedor.elements();
+                    while(e.hasMoreElements()){
+                        valor = (Color)e.nextElement();
+                        if(valor.getRed()==valorRojo&& valor.getBlue()==valorAzul&&valor.getGreen()==valorVerde){
+                            contenedor.put(clave+1,valor);
+                            contenedor.remove(clave, valor);
+                        }
+                    }
+                }
+                
+                contenedor.put(1,bitmap[i][j]);
+            }
+        }
+        Color moda = contenedor.get(contenedor.size()-1);
+        for (int i=0;i<192;i++){
+            for(int j =0;j<130;j++){
+                bitmap[i][j]= moda;
+            }
+        }
+        return moda.toString();
     }
 
     /**

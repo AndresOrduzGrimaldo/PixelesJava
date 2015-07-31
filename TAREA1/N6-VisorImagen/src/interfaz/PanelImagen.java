@@ -179,7 +179,7 @@ public class PanelImagen extends JPanel
     {
         if( imagen != null )
         {
-            String respuesta = imagen.metodo1( );
+            String respuesta = imagen.metodo1();
             JOptionPane.showMessageDialog( this, respuesta, "Respuesta", JOptionPane.INFORMATION_MESSAGE );
             repaint( );
         }
